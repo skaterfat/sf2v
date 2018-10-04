@@ -2,7 +2,9 @@
 namespace Sf;
 
 use Bitrix\Main,
-    Bitrix\Main\Localization\Loc;
+    Bitrix\Main\Localization\Loc,
+    Bitrix\Main\Service\GeoIp;
+
 Loc::loadMessages(__FILE__);
 
 /**
@@ -69,6 +71,11 @@ class PriceTable extends Main\Entity\DataManager
      *
      * @return string
      */
+
+    static $MULTIPRICE = false;
+
+    static $RATING_PRICES = Array();
+
     public static function getTableName()
     {
         return 'prices';
@@ -292,6 +299,39 @@ class PriceTable extends Main\Entity\DataManager
                     }
                 }
             }
+        }
+
+        //$ipAddress = GeoIp\Manager::getRealIp();
+        $ipAddress = '93.181.239.35';
+        $dbGeoResult = GeoIp\Manager::getDataResult($ipAddress, "en");
+
+        if($dbGeoResult) {
+
+            //global $REGION_YAROSLAVL;
+            //$REGION_YAROSLAVL = false;
+
+            if($dbGeoResult->isSuccess()) {
+
+                $GEOLOCATION = $dbGeoResult->getGeoData();
+
+                //echo '<pre>';
+                //print_r($GEOLOCATION->regionName);
+                //echo '</pre>';
+
+                if($GEOLOCATION->regionName == "Yaroslavskaya Oblast'") {
+                    self::$MULTIPRICE = true;
+                    self::$RATING_PRICES = Array(
+                        5 => 2, //OPT1
+                        4 => 3, //OPT2
+                        3 => 4, //OPT3
+                        2 => 4, //OPT3
+                        1 => 4 //OPT3
+                    );
+                    return ['BASE', 'OPT1', 'OPT2', 'OPT3'];
+                }
+
+            }
+
         }
 
         /*

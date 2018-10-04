@@ -13,6 +13,16 @@ use \Bitrix\Main\Localization\Loc;
  * @var string $templateFolder
  */
 
+if(\Sf\PriceTable::$MULTIPRICE) {
+    if(isset($arResult['ITEM_ALL_PRICES'][$arResult['ITEM_PRICE_SELECTED']]['PRICES'][\Sf\PriceTable::$RATING_PRICES[$arResult['PROPERTIES']['RATING']['VALUE']]]))
+        $arResult['ITEM_PRICES'][$arResult['ITEM_PRICE_SELECTED']] = $arResult['ITEM_ALL_PRICES'][$arResult['ITEM_PRICE_SELECTED']]['PRICES'][\Sf\PriceTable::$RATING_PRICES[$arResult['PROPERTIES']['RATING']['VALUE']]];
+    else
+        $arResult['ITEM_PRICES'][$arResult['ITEM_PRICE_SELECTED']] = $arResult['ITEM_ALL_PRICES'][$arResult['ITEM_PRICE_SELECTED']]['PRICES'][1];
+
+    $arResult['ITEM_PRICES'][$arResult['ITEM_PRICE_SELECTED']]['PRINT_RATIO_BASE_PRICE'] = $arResult['ITEM_PRICES'][$arResult['ITEM_PRICE_SELECTED']]['PRINT_BASE_PRICE'];
+    $arResult['ITEM_PRICES'][$arResult['ITEM_PRICE_SELECTED']]['PRINT_RATIO_PRICE'] = $arResult['ITEM_PRICES'][$arResult['ITEM_PRICE_SELECTED']]['PRINT_PRICE'];
+}
+
 $this->setFrameMode(true);
 $this->addExternalCss('/bitrix/css/main/bootstrap.css');
 
@@ -325,7 +335,7 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                                 <input type="text" name="QUANTITY" id="CART_QUANTITY_<?=$arResult['ID']?>" class="form-control productDetail-quantity" value="1">
                             </div>
                             <div class="col-sm-3">
-                                <a data-product-id="<?=$arResult['ID']?>" class="addToCart" href="#"><span></span>В корзину</a>
+                                <a data-product-id="<?=$arResult['ID']?>" data-price-id="<?=$price['ID']?>" class="addToCart" href="#"><span></span>В корзину</a>
                             </div>
                         </div>
 
@@ -459,6 +469,11 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                             ];
                         }
 
+
+                        //Массив цен или одна цена
+                        $arPriceCode = \Sf\PriceTable::getCurrentPriceType($_REQUEST);
+                        $PRICE_CODE = isset($arPriceCode['NAME']) ? Array($arPriceCode['NAME']) : $arPriceCode;
+
                         $intSectionID = $APPLICATION->IncludeComponent(
                             "bitrix:catalog.section",
                             "matchingGroups",
@@ -495,9 +510,7 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                                 "DISPLAY_COMPARE" => $arParams["USE_COMPARE"],
                                 "PAGE_ELEMENT_COUNT" => 3,
                                 "LINE_ELEMENT_COUNT" => $arParams["LINE_ELEMENT_COUNT"],
-                                "PRICE_CODE" => [
-                                    0 => \Sf\PriceTable::getCurrentPriceType($_REQUEST)['NAME'],
-                                ],
+                                "PRICE_CODE" => $PRICE_CODE,
                                 "USE_PRICE_COUNT" => $arParams["USE_PRICE_COUNT"],
                                 "SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
 
@@ -589,7 +602,8 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                                 'COMPARE_NAME' => $arParams['COMPARE_NAME'],
                                 'BACKGROUND_IMAGE' => (isset($arParams['SECTION_BACKGROUND_IMAGE']) ? $arParams['SECTION_BACKGROUND_IMAGE'] : ''),
                                 'COMPATIBLE_MODE' => (isset($arParams['COMPATIBLE_MODE']) ? $arParams['COMPATIBLE_MODE'] : ''),
-                                'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : '')
+                                'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : ''),
+                                'FILL_ITEM_ALL_PRICES' => 'Y'
                             ),
                             ''
                         );
@@ -640,9 +654,7 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                                 "DISPLAY_COMPARE" => $arParams["USE_COMPARE"],
                                 "PAGE_ELEMENT_COUNT" => 3,
                                 "LINE_ELEMENT_COUNT" => $arParams["LINE_ELEMENT_COUNT"],
-                                "PRICE_CODE" => [
-                                    0 => \Sf\PriceTable::getCurrentPriceType($_REQUEST)['NAME'],
-                                ],
+                                "PRICE_CODE" => $PRICE_CODE,
                                 "USE_PRICE_COUNT" => $arParams["USE_PRICE_COUNT"],
                                 "SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
 
@@ -734,7 +746,8 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                                 'COMPARE_NAME' => $arParams['COMPARE_NAME'],
                                 'BACKGROUND_IMAGE' => (isset($arParams['SECTION_BACKGROUND_IMAGE']) ? $arParams['SECTION_BACKGROUND_IMAGE'] : ''),
                                 'COMPATIBLE_MODE' => (isset($arParams['COMPATIBLE_MODE']) ? $arParams['COMPATIBLE_MODE'] : ''),
-                                'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : '')
+                                'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : ''),
+                                'FILL_ITEM_ALL_PRICES' => 'Y'
                             ),
                             ''
                         );
@@ -785,9 +798,7 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                                 "DISPLAY_COMPARE" => $arParams["USE_COMPARE"],
                                 "PAGE_ELEMENT_COUNT" => 3,
                                 "LINE_ELEMENT_COUNT" => $arParams["LINE_ELEMENT_COUNT"],
-                                "PRICE_CODE" => [
-                                    0 => \Sf\PriceTable::getCurrentPriceType($_REQUEST)['NAME'],
-                                ],
+                                "PRICE_CODE" => $PRICE_CODE,
                                 "USE_PRICE_COUNT" => $arParams["USE_PRICE_COUNT"],
                                 "SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
 
@@ -879,7 +890,8 @@ if (!empty($arResult['PROPERTIES']['PRODUCT_SUBTYPE']['VALUE'])) {
                                 'COMPARE_NAME' => $arParams['COMPARE_NAME'],
                                 'BACKGROUND_IMAGE' => (isset($arParams['SECTION_BACKGROUND_IMAGE']) ? $arParams['SECTION_BACKGROUND_IMAGE'] : ''),
                                 'COMPATIBLE_MODE' => (isset($arParams['COMPATIBLE_MODE']) ? $arParams['COMPATIBLE_MODE'] : ''),
-                                'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : '')
+                                'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : ''),
+                                'FILL_ITEM_ALL_PRICES' => 'Y'
                             ),
                             ''
                         );

@@ -120,6 +120,7 @@ $item['DETAIL_PAGE_URL'] = str_replace('#SECTION#', $arResult['SECTIONS'][$item[
     <td class="catalog-compare">
         <a
                 data-product-id="<?=$item['ID']?>"
+                data-price-id="<?=$price['ID']?>"
                 class="catalog-compareLink <?if (in_array($item['ID'], (new \Sf\Base())->getCompareIds())):?>active<?endif;?>"
                 title="Добавить в сравнение"
                 href="#">
@@ -127,6 +128,7 @@ $item['DETAIL_PAGE_URL'] = str_replace('#SECTION#', $arResult['SECTIONS'][$item[
         </a>
         <a
                 data-product-id="<?=$item['ID']?>"
+                data-price-id="<?=$price['ID']?>"
                 class="catalog-favoritesLink <?if (in_array($item['ID'], (new \Sf\Favorites)->getIds())):?>active<?endif;?>"
                 title="Добавить в избранное"
                 href="#">
@@ -134,6 +136,7 @@ $item['DETAIL_PAGE_URL'] = str_replace('#SECTION#', $arResult['SECTIONS'][$item[
         </a>
         <a
                 data-product-id="<?=$item['ID']?>"
+                data-price-id="<?=$price['ID']?>"
                 data-quantity="1"
                 class="addToCart"
                 title="Добавить в корзину"

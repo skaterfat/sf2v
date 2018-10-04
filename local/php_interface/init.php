@@ -3,12 +3,61 @@ global $DB, $MESS, $APPLICATION;
 
 use Bitrix\Main;
 use Bitrix\Main\Entity;
+use \Bitrix\Currency;
+use \Bitrix\Main\Service\GeoIp;
 
 CModule::IncludeModule('iblock');
 CModule::IncludeModule('sale');
 CModule::IncludeModule('catalog');
 
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
+//AddEventHandler("catalog", "OnGetOptimalPrice", "OnGetOptimalPriceHandler");
+
+function OnGetOptimalPriceHandler(
+    $intProductID,
+    $quantity,
+    $arUserGroups,
+    $renewal,
+    $arPrices,
+    $siteID,
+    $arDiscountCoupons
+) {
+
+    /*if(CModule::IncludeModule("iblock")){
+      $ID = $intProductID;
+      $res = CIBlockElement::GetByID($ID);
+      if($ar_res = $res->GetNext()){
+             //print_r($ar_res);
+          };
+      $arPrice = GetCatalogProductPriceList($intProductID, "SORT", "ASC");
+      AddMessage2Log(print_r($arPrice, true), "OnGetOptimalPriceHandler_arDiscountCoupons");
+   }
+
+    AddMessage2Log(print_r($intProductID, true), "OnGetOptimalPriceHandler_intProductID");
+    AddMessage2Log(print_r($quantity, true), "OnGetOptimalPriceHandler_quantity");
+    AddMessage2Log(print_r($arUserGroups, true), "OnGetOptimalPriceHandler_arUserGroups");
+    AddMessage2Log(print_r($renewal, true), "OnGetOptimalPriceHandler_renewal");
+    AddMessage2Log(print_r($arPrices, true), "OnGetOptimalPriceHandler_arPrices");
+    AddMessage2Log(print_r($siteID, true), "OnGetOptimalPriceHandler_siteID");
+    AddMessage2Log(print_r($arDiscountCoupons, true), "OnGetOptimalPriceHandler_arDiscountCoupons");*/
+
+    /*return [
+      'PRICE' => [
+         "ID" => $intProductID,
+         'CATALOG_GROUP_ID' => 18307,
+         //'PRICE' => "100",
+         'CURRENCY' => \Bitrix\Currency\CurrencyManager::getBaseCurrency(),
+         'ELEMENT_IBLOCK_ID' => $intProductID,
+         'VAT_INCLUDED' => "Y",
+      ],
+      'DISCOUNT' => [
+          'VALUE' => '',
+          'CURRENCY' => "RUB",
+       ],
+   ];*/
+
+}
 
 /*if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == ""){
     $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -18,10 +67,10 @@ require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 $change='';
 
-if(strpos($_SERVER['REQUEST_URI'],'index.php')){
+/*if(strpos($_SERVER['REQUEST_URI'],'index.php')){
     $_SERVER['REQUEST_URI']=str_replace("index.php/","",$_SERVER['REQUEST_URI']);
     $change='1';
-}
+}*/
 if(substr($_SERVER['REQUEST_URI'],0,2)=='//'){
     $_SERVER['REQUEST_URI']=str_replace("//","/",$_SERVER['REQUEST_URI']);
     $change='1';

@@ -1,12 +1,14 @@
-<? use Sf\Base;
+<?
+    if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
+    use Sf\Base;
+
+?>
 <!doctype html>
 <html>
 <head>
     <title><?=$APPLICATION->ShowTitle(true)?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="cmsmagazine" content="2dcd14ba52b1fedf0886b777e98fb5c8" />
     <?$APPLICATION->AddHeadScript("/bitrix/js/main/ajax.js");?>
     <?$APPLICATION->ShowHead();?>
     <?if ($_REQUEST['PAGEN_1']):?>
@@ -186,6 +188,11 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
                 </a>
             </div>
             <div class="col-sm-4 col-md-6 nopadding">
+                <?
+                //Массив цен или одна цена
+                $arPriceCode = \Sf\PriceTable::getCurrentPriceType($_REQUEST);
+                $PRICE_CODE = isset($arPriceCode['NAME']) ? Array($arPriceCode['NAME']) : $arPriceCode;
+                ?>
                 <?$APPLICATION->IncludeComponent("bitrix:search.title", "visual1", Array(
                     "NUM_CATEGORIES" => "1",	// Количество категорий поиска
                         "TOP_COUNT" => "5",	// Количество результатов в каждой категории
@@ -203,9 +210,7 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
                         "SHOW_INPUT" => "Y",	// Показывать форму ввода поискового запроса
                         "INPUT_ID" => "title-search-input",	// ID строки ввода поискового запроса
                         "CONTAINER_ID" => "search",	// ID контейнера, по ширине которого будут выводиться результаты
-                        "PRICE_CODE" => array(	// Тип цены
-                            0 => "BASE",
-                        ),
+                        "PRICE_CODE" => $PRICE_CODE, // Тип цены
                         "SHOW_PREVIEW" => "Y",	// Показать картинку
                         "PREVIEW_WIDTH" => "75",	// Ширина картинки
                         "PREVIEW_HEIGHT" => "75",	// Высота картинки

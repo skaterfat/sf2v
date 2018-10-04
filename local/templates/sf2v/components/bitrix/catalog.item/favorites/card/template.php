@@ -84,6 +84,7 @@ if (!empty($item['IBLOCK_SECTION_ID'])) {
     <td class="catalog-compare">
         <a
             data-product-id="<?=$item['ID']?>"
+            data-price-id="<?=$price['ID']?>"
             class="catalog-delete compare-delete"
             title="Удалить из избранного"
             href="#">

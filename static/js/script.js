@@ -5,7 +5,7 @@ $(document).ready(function() {
     var catalogLeftSearchResult = false;
 
     var popupYouCity = $('.popupYouCity');
-    
+
     $(document).on('click', '.popup-city-yes', function () {
 
         popupYouCity.hide();
@@ -74,8 +74,8 @@ $(document).ready(function() {
             }
         });
     });
-    
-    
+
+
     var pagen = false;
 
     $(document).on('click', '.ajax-nav', function () {
@@ -379,12 +379,13 @@ $(document).ready(function() {
 
         var productId = obj.data('product-id');
         var fieldQuantity = $('#CART_QUANTITY_' + productId);
+        var priceId = obj.data('price-id');
 
         $.ajax({
             type: 'POST',
             url: '/ajax/ajax.addTobasket.php',
             dataType: 'json',
-            data: {PRODUCT_ID: productId, QUANTITY: fieldQuantity.val()},
+            data: {PRODUCT_ID: productId, QUANTITY: fieldQuantity.val(), PRICE_ID: priceId},
             success: function(data) {
 
                 if (data.error) {
@@ -537,7 +538,7 @@ $(document).ready(function() {
 
     // Показать / скрыть блок характеристик в КОРЗИНЕ ТОВАРОВ
     $('.catalog-chs-show-full').click(function () {
-        var obj = $(this);   
+        var obj = $(this);
         var chs = obj.closest('.catalog-chs');
 
         if (chs.hasClass('show')) {

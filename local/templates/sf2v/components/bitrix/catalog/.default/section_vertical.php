@@ -89,7 +89,7 @@ if ($isFilter || $isSidebar): ?>
 	<div class="row">
 		<div class="col-xs-12">
 			<?
-			if (ModuleManager::isModuleInstalled("sale"))
+			/*if (ModuleManager::isModuleInstalled("sale"))
 			{
 				$arRecomData = array();
 				$recomCacheID = array('IBLOCK_ID' => $arParams['IBLOCK_ID']);
@@ -205,7 +205,7 @@ if ($isFilter || $isSidebar): ?>
 				?>
 				</div>
 				<?
-			}
+			}*/
 			?>
 		</div>
 		<div class="col-xs-12">
@@ -377,7 +377,8 @@ if ($isFilter || $isSidebar): ?>
 					'COMPARE_NAME' => $arParams['COMPARE_NAME'],
 					'BACKGROUND_IMAGE' => (isset($arParams['SECTION_BACKGROUND_IMAGE']) ? $arParams['SECTION_BACKGROUND_IMAGE'] : ''),
 					'COMPATIBLE_MODE' => (isset($arParams['COMPATIBLE_MODE']) ? $arParams['COMPATIBLE_MODE'] : ''),
-					'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : '')
+					'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : ''),
+                    'FILL_ITEM_ALL_PRICES' => 'Y'
 				),
 				$component
 			);

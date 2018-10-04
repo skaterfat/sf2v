@@ -64,6 +64,7 @@ if (empty($item['PREVIEW_PICTURE']['SRC'])) {
     <div class="col-sm-5">
         <a
                 data-product-id="<?=$item['ID']?>"
+                data-price-id="<?=$price['ID']?>"
                 data-quantity="1"
                 class="addToCart"
                 href="#"><span></span>

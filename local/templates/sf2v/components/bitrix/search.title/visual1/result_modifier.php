@@ -86,12 +86,23 @@ if (!empty($arResult["ELEMENTS"]) && CModule::IncludeModule("iblock"))
 	else
 		$arResult["PRICES"] = array();
 
+	/*if(\Sf\PriceTable::$MULTIPRICE) {
+		if(isset($arResult['ITEM']['ITEM_ALL_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRICES'][\Sf\PriceTable::$RATING_PRICES[$arResult['ITEM']['PROPERTIES']['RATING']['VALUE']]]))
+			$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']] = $arResult['ITEM']['ITEM_ALL_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRICES'][\Sf\PriceTable::$RATING_PRICES[$arResult['ITEM']['PROPERTIES']['RATING']['VALUE']]];
+		else
+			$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']] = $arResult['ITEM']['ITEM_ALL_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRICES'][1];
+
+		$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_RATIO_BASE_PRICE'] = $arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_BASE_PRICE'];
+		$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_RATIO_PRICE'] = $arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_PRICE'];
+	}*/
+
 	$arSelect = array(
 		"ID",
 		"IBLOCK_ID",
 		"PREVIEW_TEXT",
 		"PREVIEW_PICTURE",
 		"DETAIL_PICTURE",
+		"PROPERTY_RATING"
 	);
 	$arFilter = array(
 		"IBLOCK_LID" => SITE_ID,
@@ -117,6 +128,33 @@ if (!empty($arResult["ELEMENTS"]) && CModule::IncludeModule("iblock"))
 
 		$arResult["ELEMENTS"][$arElement["ID"]] = $arElement;
 	}
+
+	if(\Sf\PriceTable::$MULTIPRICE) {
+
+		foreach($arResult["ELEMENTS"] as &$arElem) {
+
+			if($arElem["PRICES"]) {
+
+				$arPrices = Array();
+
+				foreach($arElem["PRICES"] as $arP)
+					$arPrices[$arP['PRICE_ID']] = $arP;
+
+				if(isset($arPrices[\Sf\PriceTable::$RATING_PRICES[$arElem['PROPERTY_RATING_VALUE']]])) {
+					$arPrices[\Sf\PriceTable::$RATING_PRICES[$arElem['PROPERTY_RATING_VALUE']]]['MIN_PRICE'] = 'Y';
+					$arElem["PRICES"] = Array(\Sf\PriceTable::$RATING_PRICES[$arElem['PROPERTY_RATING_VALUE']] => $arPrices[\Sf\PriceTable::$RATING_PRICES[$arElem['PROPERTY_RATING_VALUE']]]);
+				}
+				else {
+					$arPrices[1]['MIN_PRICE'] = 'Y';
+					$arElem["PRICES"] = Array("BASE" => $arPrices[1]);
+				}
+
+			}
+
+		}
+
+	}
+
 }
 
 foreach($arResult["SEARCH"] as $i=>$arItem)

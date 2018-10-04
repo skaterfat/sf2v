@@ -229,6 +229,11 @@ $APPLICATION->SetTitle("Интернет-магазин \"Сфера 2В\"");
                 '>DETAIL_PICTURE' => 0,
             ];
 
+
+            //Массив цен или одна цена
+            $arPriceCode = \Sf\PriceTable::getCurrentPriceType($_REQUEST);
+            $PRICE_CODE = isset($arPriceCode['NAME']) ? Array($arPriceCode['NAME']) : $arPriceCode;
+
             foreach ($arCatalogSectionIds as $iSectionId) {
                 $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section",
@@ -270,9 +275,7 @@ $APPLICATION->SetTitle("Интернет-магазин \"Сфера 2В\"");
                         "DISPLAY_COMPARE" => $arParams["USE_COMPARE"],
                         "PAGE_ELEMENT_COUNT" => 4,
                         "LINE_ELEMENT_COUNT" => $arParams["LINE_ELEMENT_COUNT"],
-                        "PRICE_CODE" => [
-                            0 => \Sf\PriceTable::getCurrentPriceType($_REQUEST)['NAME'],
-                        ],
+                        "PRICE_CODE" => $PRICE_CODE,
                         "USE_PRICE_COUNT" => $arParams["USE_PRICE_COUNT"],
                         "SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
 
@@ -364,7 +367,8 @@ $APPLICATION->SetTitle("Интернет-магазин \"Сфера 2В\"");
                         'COMPARE_NAME' => $arParams['COMPARE_NAME'],
                         'BACKGROUND_IMAGE' => (isset($arParams['SECTION_BACKGROUND_IMAGE']) ? $arParams['SECTION_BACKGROUND_IMAGE'] : ''),
                         'COMPATIBLE_MODE' => (isset($arParams['COMPATIBLE_MODE']) ? $arParams['COMPATIBLE_MODE'] : ''),
-                        'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : '')
+                        'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : ''),
+                        'FILL_ITEM_ALL_PRICES' => 'Y'
                     ),
                     ''
                 );

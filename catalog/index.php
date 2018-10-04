@@ -21,7 +21,9 @@ if ($_SESSION['SHOW_GOODS_ON_ORDER'] != 1) {
 
 //Сортировка
 $arSort = \Sf\Helper::getSortFieldByRequest($_REQUEST);
-
+//Массив цен или одна цена
+$arPriceCode = \Sf\PriceTable::getCurrentPriceType($_REQUEST);
+$PRICE_CODE = isset($arPriceCode['NAME']) ? Array($arPriceCode['NAME']) : $arPriceCode;
 ?>
 <?$APPLICATION->IncludeComponent("bitrix:catalog", ".default", Array(
 	"IBLOCK_TYPE" => "catalog",	// Тип инфоблока
@@ -82,9 +84,7 @@ $arSort = \Sf\Helper::getSortFieldByRequest($_REQUEST);
 		"URL_TEMPLATES_READ" => "",	// Страница чтения темы (пусто - получить из настроек форума)
 		"SHOW_LINK_TO_FORUM" => "Y",	// Показать ссылку на форум
 		"USE_COMPARE" => "Y",	// Разрешить сравнение товаров
-		"PRICE_CODE" => array(	// Тип цены
-			0 => \Sf\PriceTable::getCurrentPriceType($_REQUEST)['NAME'],
-		),
+		"PRICE_CODE" => $PRICE_CODE,	// Тип цены
 		"USE_PRICE_COUNT" => "N",	// Использовать вывод цен с диапазонами
 		"SHOW_PRICE_COUNT" => "1",	// Выводить цены для количества
 		"PRICE_VAT_INCLUDE" => "Y",	// Включать НДС в цену

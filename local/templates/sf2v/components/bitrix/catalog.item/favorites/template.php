@@ -13,6 +13,16 @@ use \Bitrix\Main;
  * @var string $templateFolder
  */
 
+if(\Sf\PriceTable::$MULTIPRICE) {
+	if(isset($arResult['ITEM']['ITEM_ALL_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRICES'][\Sf\PriceTable::$RATING_PRICES[$arResult['ITEM']['PROPERTIES']['RATING']['VALUE']]]))
+		$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']] = $arResult['ITEM']['ITEM_ALL_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRICES'][\Sf\PriceTable::$RATING_PRICES[$arResult['ITEM']['PROPERTIES']['RATING']['VALUE']]];
+	else
+		$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']] = $arResult['ITEM']['ITEM_ALL_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRICES'][1];
+
+	$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_RATIO_BASE_PRICE'] = $arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_BASE_PRICE'];
+	$arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_RATIO_PRICE'] = $arResult['ITEM']['ITEM_PRICES'][$arResult['ITEM']['ITEM_PRICE_SELECTED']]['PRINT_PRICE'];
+}
+
 if (isset($arResult['ITEM']))
 {
 	$item = $arResult['ITEM'];
